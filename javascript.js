@@ -1,12 +1,13 @@
 const display = document.querySelector('.display');
 const equalsBtn = document.querySelector('.equals');
+const clearBtn = document.querySelector('.clear');
 const operandButtons = document.querySelectorAll('.operand');
 const operatorButtons = document.querySelectorAll('.operator');
 
 let operator, num1, num2;
-let displayValue = '';
+let displayValue = 0;
 let operandsArray = [];
-let isResult, isOperator = false;
+let isResult, isOperator, isError = false;
 
 const operate = (operator, num1, num2) => {
     switch (operator) {
@@ -26,13 +27,21 @@ const subtract = (num1, num2) => num1 - num2;
 const multiply = (num1, num2) => num1 * num2;
 const divide = (num1, num2) => num1 / num2;
 
+const roundNumber = num => Math.round(num.toFixed(10) * 10e10) / 10e10;
+
+const clearDisplay = () => {
+    display.textContent = 0;
+    displayValue = 0;
+    operandsArray = [];
+}
+
 const updateDisplay = btn => {
     if (isResult) {
         displayValue = btn.textContent;
     } else {
         displayValue += btn.textContent;
     }
-    display.textContent = displayValue;
+    display.textContent = roundNumber(Number(displayValue));
 }
 
 const addOperand = (operand) => {
@@ -44,7 +53,13 @@ const addOperand = (operand) => {
 
 const showResult = (operator) => {
     displayValue = operate(operator, operandsArray[0], operandsArray[1]);
-    display.textContent = displayValue;
+    if (displayValue === Infinity) {
+        display.textContent = '∞';
+        operandsArray = [];
+        displayValue = 0;
+        return;
+    }
+    display.textContent = roundNumber(Number(displayValue));
     operandsArray = [];
     isResult = true;
 }
@@ -76,8 +91,14 @@ operatorButtons.forEach(btn => {
 })
 
 equalsBtn.addEventListener('click', () => {
-    if (typeof displayValue === 'number' || isOperator || isResult) return;
+    if (typeof displayValue === 'number' 
+        || operandsArray.length === 0 
+        || isOperator 
+        || isResult
+    ) return;
     addOperand(displayValue);
     showResult(operator);
     isOperator = false;
 })
+
+clearBtn.addEventListener('click', clearDisplay);

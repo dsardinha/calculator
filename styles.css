@@ -21,3 +21,19 @@
     flex-grow: 1;
     font-size: 25px;
 }
+
+.operand {
+    background-color: rgba(29, 223, 29, 0.408);
+}
+
+.equals {
+    background-color: lightyellow;
+}
+
+.operator {
+    background-color: lightsteelblue;
+}
+
+.clear {
+    background-color: lightsalmon;
+}
