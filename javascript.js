@@ -1,6 +1,7 @@
 const display = document.querySelector('.display');
 const equalsBtn = document.querySelector('.equals');
 const clearBtn = document.querySelector('.clear');
+const eraseToTheLeftBtn = document.querySelector('.erase-to-the-left');
 const operandButtons = document.querySelectorAll('.operand');
 const operatorButtons = document.querySelectorAll('.operator');
 
@@ -36,7 +37,7 @@ const clearDisplay = () => {
 }
 
 const updateDisplay = btn => {
-    if (isResult) {
+    if (isResult || displayValue === 0) {
         displayValue = btn.textContent;
     } else {
         displayValue += btn.textContent;
@@ -47,7 +48,7 @@ const updateDisplay = btn => {
 const addOperand = (operand) => {
     operandsArray.push(Number(operand));
     if (operandsArray.length !== 0) {
-        displayValue = '';
+        displayValue = 0;
     }
 }
 
@@ -102,3 +103,12 @@ equalsBtn.addEventListener('click', () => {
 })
 
 clearBtn.addEventListener('click', clearDisplay);
+
+eraseToTheLeftBtn.addEventListener('click', () => {
+    if (displayValue === 0 || isResult) return;
+    displayValue = displayValue.slice(0, -1);
+    if (displayValue.length === 0) {
+        displayValue = 0;
+    }
+    display.textContent = displayValue;
+})
